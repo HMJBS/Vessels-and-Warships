@@ -39,13 +39,13 @@ public class RenderSimpleFlag extends Render{
 		//移動命令glTranslatedで適切な場所に移動させる
 		GL11.glTranslated(posX, posY, posZ);
 		//this.model.render(entity, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0625f);
-		this.tesselatorRander();
+		this.tesselatorRander(entity);
 		GL11.glPopMatrix();
 
 	}
 
 	//tesselatorを使用して旗を直接描画
-	private void tesselatorRander() {
+	private void tesselatorRander(EntitySimpleFlag entity) {
 
 		//http://greyminecraftcoder.blogspot.jp/2013/08/the-tessellator.html
 	   Tessellator tessellator = Tessellator.instance;
@@ -53,19 +53,80 @@ public class RenderSimpleFlag extends Render{
 	   //tessellator.setBrightness(lightValue); //多分必要ない
 	   tessellator.setColorOpaque_F(1.0F, 1.0F, 1.0F);
 
+	   float widthByBlock=entity.getTextureWidth()/360.0f*entity.getTextureScale();
+	   float heightByBlock=entity.getTextureHeight()/360.0f*entity.getTextureScale();
+
 	   //左3パラメータxyzの単位はブロック単位、uvはテクセル(Texel)単位 テキスチャの辺の長さを1とした時の相対的な座標指定
-	   //x+の表側
-	   tessellator.addVertexWithUV(2, 0, 0, 1.0, 1.0);		//右下
-	   tessellator.addVertexWithUV(2, 1, 0, 1.0, 0.0);		//右上
-	   tessellator.addVertexWithUV(0, 1, 0, 0.0, 0.0);		//左上
-	   tessellator.addVertexWithUV(0, 0, 0, 0.0, 1.0);		//左下
 
-	   //x-の裏側
-	   tessellator.addVertexWithUV(0, 0, 0, 0.0, 1.0);		//左下
-	   tessellator.addVertexWithUV(0, 1, 0, 0.0, 0.0);		//左上
-	   tessellator.addVertexWithUV(2, 1, 0, 1.0, 0.0);		//右上
-	   tessellator.addVertexWithUV(2, 0, 0, 1.0, 1.0);		//右下
+	   switch(entity.getDirection()){
+	   case 0:
+	   default:
+		   //direction=0 z+軸方向に旗の軸
 
+		   //x+を向く面
+		   tessellator.addVertexWithUV(0, 0, 0, 1.0, 1.0);							//右下
+		   tessellator.addVertexWithUV(0, heightByBlock, 0, 1.0, 0.0);				//右上
+		   tessellator.addVertexWithUV(0, heightByBlock, widthByBlock, 0.0, 0.0);	//左上
+		   tessellator.addVertexWithUV(0, 0, widthByBlock, 0.0, 1.0);				//左下
+
+		   //x-を向く面
+		   tessellator.addVertexWithUV(0, 0, widthByBlock, 0.0, 1.0);				//左下
+		   tessellator.addVertexWithUV(0, heightByBlock, widthByBlock, 0.0, 0.0);	//左上
+		   tessellator.addVertexWithUV(0, heightByBlock, 0, 1.0, 0.0);				//右上
+		   tessellator.addVertexWithUV(0, 0, 0, 1.0, 1.0);							//右下
+
+		   break;
+
+	   case 1:
+
+		   //direction=1 x-軸方向に旗の軸
+
+		   //z+を向く面
+		   tessellator.addVertexWithUV(widthByBlock, 0, 0, 1.0, 1.0);					//右下
+		   tessellator.addVertexWithUV(widthByBlock, heightByBlock, 0, 1.0, 0.0);		//右上
+		   tessellator.addVertexWithUV(0, heightByBlock, 0, 0.0, 0.0);					//左上
+		   tessellator.addVertexWithUV(0, 0, 0, 0.0, 1.0);								//左下
+
+		   //z-を向く面
+		   tessellator.addVertexWithUV(0, 0, 0, 0.0, 1.0);								//左下
+		   tessellator.addVertexWithUV(0, heightByBlock, 0, 0.0, 0.0);					//左上
+		   tessellator.addVertexWithUV(widthByBlock, heightByBlock, 0, 1.0, 0.0);		//右上
+		   tessellator.addVertexWithUV(widthByBlock, 0, 0, 1.0, 1.0);					//右下
+		   break;
+
+	   case 2:
+		   //direction=2 z-軸方向に旗の軸
+
+		   //x+を向く面
+		   tessellator.addVertexWithUV(0, 0, 0, 0.0, 1.0);							//右下
+		   tessellator.addVertexWithUV(0, heightByBlock, 0, 0.0, 0.0);				//右上
+		   tessellator.addVertexWithUV(0, heightByBlock, widthByBlock, 1.0, 0.0);	//左上
+		   tessellator.addVertexWithUV(0, 0, widthByBlock, 1.0, 1.0);				//左下
+
+		   //x-を向く面
+		   tessellator.addVertexWithUV(0, 0, widthByBlock, 1.0, 1.0);				//左下
+		   tessellator.addVertexWithUV(0, heightByBlock, widthByBlock, 1.0, 0.0);	//左上
+		   tessellator.addVertexWithUV(0, heightByBlock, 0, 0.0, 0.0);				//右上
+		   tessellator.addVertexWithUV(0, 0, 0, 0.0, 1.0);							//右下
+
+		   break;
+	   case 3:
+		   //direction=3 x+軸方向に旗の軸
+
+		   //z+を向く面
+		   tessellator.addVertexWithUV(widthByBlock, 0, 0, 0.0, 1.0);					//右下
+		   tessellator.addVertexWithUV(widthByBlock, heightByBlock, 0, 0.0, 0.0);		//右上
+		   tessellator.addVertexWithUV(0, heightByBlock, 0, 1.0, 0.0);					//左上
+		   tessellator.addVertexWithUV(0, 0, 0, 1.0, 1.0);								//左下
+
+		   //z-を向く面
+		   tessellator.addVertexWithUV(0, 0, 0, 1.0, 1.0);								//左下
+		   tessellator.addVertexWithUV(0, heightByBlock, 0, 1.0, 0.0);					//左上
+		   tessellator.addVertexWithUV(widthByBlock, heightByBlock, 0, 0.0, 0.0);		//右上
+		   tessellator.addVertexWithUV(widthByBlock, 0, 0, 0.0, 1.0);					//右下
+		   break;
+
+	   }
 	   tessellator.draw();
 
 	}
