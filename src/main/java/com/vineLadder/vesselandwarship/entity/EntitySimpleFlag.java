@@ -21,6 +21,8 @@ public class EntitySimpleFlag extends Entity {
 	private int health;
 	private static int MAX_HEALTH=5;
 	private BufferedImage texture;
+	private float textureScale;		//テキスチャの拡大倍率　1.0なら360pixelを1ブロック分で描画
+	private int direction;		//旗の軸の方向　0 south z+, 1 west x- ,2 north z-, 3 east x+
 
 	//旗のテキスチャファイル名
 	private String textureName;
@@ -36,9 +38,11 @@ public class EntitySimpleFlag extends Entity {
 		this.textureName="uk_nav.png";
 		this.resourceLoc= new ResourceLocation("vesselandwarship","textures/entity/" + this.textureName);
 		this.checkTextureSize();
+		this.textureScale=1.0f;
 		this.setSize(0.5f, 1.0f);
-		//this.ignoreFrustumCheck=true;	//エンティティが画面内になくても描画する
+		this.ignoreFrustumCheck=true;	//エンティティが画面内になくても描画する
 		this.health=this.MAX_HEALTH;
+		this.direction=1;
 	}
 
 	private void checkTextureSize(){
@@ -63,9 +67,9 @@ public class EntitySimpleFlag extends Entity {
 		//Minecraft.getMinecraft().getResouseManager()
 		//.getResouse(new ResouseLocation(modid, "texture/entity....")).getInputStream()を利用しFileStreamを取得する方法
 
-		
+
 		try {
-			
+
 			InputStream path;
 			path = Minecraft.getMinecraft().getResourceManager().getResource(resourceLoc).getInputStream();
 			texture = ImageIO.read(path);
@@ -81,8 +85,8 @@ public class EntitySimpleFlag extends Entity {
 		this.width=texture.getWidth();
 		this.height=texture.getHeight();
 		System.out.println("checkTextureSize Fin");
-		
-		
+
+
 	}
 
 
@@ -182,11 +186,20 @@ public class EntitySimpleFlag extends Entity {
 
 	public float getTextureHeight(){
 		return this.height;
-		
+
 	}
-	
+
 	public float getTextureWidth(){
 		return this.width;
-		
+
+	}
+
+	public float getTextureScale(){
+		return this.textureScale;
+	}
+
+	public int getDirection() {
+
+		return this.direction;
 	}
 }
