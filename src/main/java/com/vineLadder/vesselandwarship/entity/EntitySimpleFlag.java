@@ -1,14 +1,16 @@
 package com.vineLadder.vesselandwarship.entity;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 public class EntitySimpleFlag extends Entity {
@@ -22,31 +24,62 @@ public class EntitySimpleFlag extends Entity {
 
 	//旗のテキスチャファイル名
 	private String textureName;
+	private ResourceLocation resourceLoc;
 
 
 	public EntitySimpleFlag(World world) {
 
 		//スーパークラスのコンストラクタを忘れずに
 		super(world);
-		this.textureName="uk_nav.png";
+
+		//テキスチャにしたいpngファイル名
+		this.textureName="uk_nav_resized.png";
+		this.resourceLoc= new ResourceLocation("vesselandwarship","textures/entity/" + this.textureName);
 		this.checkTextureSize();
 		this.setSize(width, height);
 		this.health=this.MAX_HEALTH;
 	}
 
 	private void checkTextureSize(){
-		String path =   "..\\..\\..\\..\\..\\resources\\assets\\vesselandwarship\\textures\\entity\\uk_nav.png";
+
+		/*
+		//.minecraftフォルダのFileオブジェクトを取得する方法　assetsの内部ではないのでjar外部のリソースファイルを取得する方法?
+		String path=((File)FMLInjectionData.data()[6]).getAbsolutePath();	//return C:\ShipVessels\eclipse\.
+		System.out.println(path);
+
+
+
 		try {
 			texture = ImageIO.read(new File(path));
 		} catch (IOException e) {
-			
+
 			System.out.println(path);
 			e.printStackTrace();
+
+		}
+		*/
+
+		//Minecraft.getMinecraft().getResouseManager()
+		//.getResouse(new ResouseLocation(modid, "texture/entity....")).getInputStream()を利用しFileStreamを取得する方法
+
+		
+		try {
 			
+			InputStream path;
+			path = Minecraft.getMinecraft().getResourceManager().getResource(resourceLoc).getInputStream();
+			texture = ImageIO.read(path);
+			path.close();
+
+		} catch (IOException e) {
+
+			System.out.println("failed to load texture for SimpleFlag.");
+			e.printStackTrace();
+			texture=null;
 		}
 
 		this.width=texture.getWidth();
 		this.height=texture.getHeight();
+		System.out.println("checkTextureSize Fin");
 	}
 
 
@@ -135,6 +168,11 @@ public class EntitySimpleFlag extends Entity {
 	protected void writeEntityToNBT(NBTTagCompound p_70014_1_) {
 		// TODO 自動生成されたメソッド・スタブ
 
+	}
+
+	public ResourceLocation getResourceLocation(){
+
+		return this.resourceLoc;
 	}
 
 }

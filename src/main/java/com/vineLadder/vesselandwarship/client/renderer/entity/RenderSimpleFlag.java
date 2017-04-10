@@ -13,7 +13,7 @@ import net.minecraft.util.ResourceLocation;
 public class RenderSimpleFlag extends Render{
 
 	//参考　https://github.com/defeatedcrow/AppleMilkTea2_1.7.10/blob/master/java/mods/defeatedcrow/client/entity/RenderSandwichEntity.java
-	private static  ResourceLocation texture = new ResourceLocation("vesselandwarship","textures/entity/uk_nav.png");
+	//private static  ResourceLocation texture = new ResourceLocation("vesselandwarship","textures/entity/uk_nav.png");
 	protected ModelSimpleFlag model;
 
 	public RenderSimpleFlag(){
@@ -34,7 +34,7 @@ public class RenderSimpleFlag extends Render{
 
 		GL11.glPushMatrix();
 		//bindTextureしないと変なＴＥＸＴＵＲＥが貼り付けられる
-		this.bindTexture(texture);
+		this.bindTexture(entity.getResourceLocation());
 		//エンティティの描画は目線の先が基準らしいので
 		//移動命令glTranslatedで適切な場所に移動させる
 		GL11.glTranslated(posX, posY, posZ);
@@ -83,9 +83,10 @@ public class RenderSimpleFlag extends Render{
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(Entity p_110775_1_) {
+	protected ResourceLocation getEntityTexture(Entity entity) {
 
-		return this.texture;
+		//entitySimpleFlagのメンバであるResourceLocationをキャストを使って無理やり取得(していいのか？)
+		return ((EntitySimpleFlag)entity).getResourceLocation();
 	}
 
 
