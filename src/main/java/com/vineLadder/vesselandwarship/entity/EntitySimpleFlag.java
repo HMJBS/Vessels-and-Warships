@@ -33,10 +33,11 @@ public class EntitySimpleFlag extends Entity {
 		super(world);
 
 		//テキスチャにしたいpngファイル名
-		this.textureName="uk_nav_resized.png";
+		this.textureName="uk_nav.png";
 		this.resourceLoc= new ResourceLocation("vesselandwarship","textures/entity/" + this.textureName);
 		this.checkTextureSize();
-		this.setSize(width, height);
+		this.setSize(0.5f, 1.0f);
+		//this.ignoreFrustumCheck=true;	//エンティティが画面内になくても描画する
 		this.health=this.MAX_HEALTH;
 	}
 
@@ -80,6 +81,8 @@ public class EntitySimpleFlag extends Entity {
 		this.width=texture.getWidth();
 		this.height=texture.getHeight();
 		System.out.println("checkTextureSize Fin");
+		
+		
 	}
 
 
@@ -170,9 +173,20 @@ public class EntitySimpleFlag extends Entity {
 
 	}
 
+	/* このエンティティのResourceLocationを返す　*/
 	public ResourceLocation getResourceLocation(){
 
 		return this.resourceLoc;
 	}
 
+
+	public float getTextureHeight(){
+		return this.height;
+		
+	}
+	
+	public float getTextureWidth(){
+		return this.width;
+		
+	}
 }
