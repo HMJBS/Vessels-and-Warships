@@ -8,6 +8,7 @@ import javax.imageio.ImageIO;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
@@ -15,14 +16,16 @@ import net.minecraft.world.World;
 
 public class EntitySimpleFlag extends Entity {
 
+
 	//単位はブロック単位
 	private float width;
 	private float height;
 	private int health;
-	private static int MAX_HEALTH=5;
+	private static float SHIFT_FOR_FENCE = 0.37f;
 	private BufferedImage texture;
 	private float textureScale;		//テキスチャの拡大倍率　1.0なら360pixelを1ブロック分で描画
-	private int direction;		//旗の軸の方向　0 south z+, 1 west x- ,2 north z-, 3 east x+
+	private int direction;			//旗の軸の方向　0 south z+, 1 west x- ,2 north z-, 3 east x+
+	private float shiftAmout;		//旗の軸がある方向へのシフト量　fenceときれいにくっつけるために利用
 
 	//旗のテキスチャファイル名
 	private String textureName;
@@ -41,8 +44,8 @@ public class EntitySimpleFlag extends Entity {
 		this.textureScale=1.0f;
 		this.setSize(0.5f, 1.0f);
 		this.ignoreFrustumCheck=true;	//エンティティが画面内になくても描画する
-		this.health=this.MAX_HEALTH;
-		this.direction=1;
+		this.direction=0;
+		this.shiftAmout=0.0f;
 	}
 
 	private void checkTextureSize(){
@@ -101,6 +104,7 @@ public class EntitySimpleFlag extends Entity {
 	public boolean canBeCollidedWith() {
 
 		//ollide with another entity
+		//これをfalseにするとプレイヤーはクリックでの干渉ができなくなる？
 		return true;
 	}
 
@@ -136,26 +140,26 @@ public class EntitySimpleFlag extends Entity {
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float damage) {
 
-       if (this.isEntityInvulnerable())
-        {
-            return false;
-        }
-        else
-        {
-            if (!this.isDead && !this.worldObj.isRemote)
-            {
-                this.health -= damage;
+		if(this.isEntityInvulnerable()){
+			return false;
+		}
 
-                if (this.health <= 0)
-                {
-                    this.setDead();
-                }
-            }
-
-            return true;
-        }
+		this.setDead();
+		return true;
 	}
 
+
+
+	@Override
+	public boolean interactFirst(EntityPlayer entity) {
+
+		/*
+		//右クリックで回転　デバッグ用
+		this.direction = (this.direction+1)%4;
+		System.out.println("direction=" + this.direction);
+		*/
+		return true;
+	}
 
 
 	@Override
@@ -201,5 +205,10 @@ public class EntitySimpleFlag extends Entity {
 	public int getDirection() {
 
 		return this.direction;
+	}
+
+	public float getShiftAmout(){
+
+		return this.shiftAmout;
 	}
 }
