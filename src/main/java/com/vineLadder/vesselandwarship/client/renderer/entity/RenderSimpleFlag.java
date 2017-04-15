@@ -14,6 +14,7 @@ public class RenderSimpleFlag extends Render{
 
 	//参考　https://github.com/defeatedcrow/AppleMilkTea2_1.7.10/blob/master/java/mods/defeatedcrow/client/entity/RenderSandwichEntity.java
 	//private static  ResourceLocation texture = new ResourceLocation("vesselandwarship","textures/entity/uk_nav.png");
+
 	protected ModelSimpleFlag model;
 
 	public RenderSimpleFlag(){
@@ -56,10 +57,13 @@ public class RenderSimpleFlag extends Render{
 	   float widthByBlock=entity.getTextureWidth()/360.0f*entity.getTextureScale();
 	   float heightByBlock=entity.getTextureHeight()/360.0f*entity.getTextureScale();
 	   float shift=entity.getShiftAmout();
+	   int direction=entity.getDirection();
 
 	   //左3パラメータxyzはブロック単位で原点はブロックの真ん中、uvはテクセル(Texel)単位 テキスチャの辺の長さを1とした時の相対的な座標指定
 
-	   switch(entity.getDirection()){
+	   System.out.println("rendering : direction=" + direction + " shift=" + shift);
+
+	   switch(direction){
 	   case 0:
 	   default:
 		   //direction=0 z+軸方向に旗の軸
@@ -67,12 +71,12 @@ public class RenderSimpleFlag extends Render{
 		   //x+を向く面
 		   tessellator.addVertexWithUV(0, 0, 0.5-widthByBlock+shift, 1.0, 1.0);							//右下
 		   tessellator.addVertexWithUV(0, heightByBlock, 0.5-widthByBlock+shift, 1.0, 0.0);				//右上
-		   tessellator.addVertexWithUV(0, heightByBlock, 0.5+shift, 0.0, 0.0);				//左上
-		   tessellator.addVertexWithUV(0, 0, 0.5+shift, 0.0, 1.0);							//左下
+		   tessellator.addVertexWithUV(0, heightByBlock, 0.5+shift, 0.0, 0.0);							//左上
+		   tessellator.addVertexWithUV(0, 0, 0.5+shift, 0.0, 1.0);										//左下
 
 		   //x-を向く面
-		   tessellator.addVertexWithUV(0, 0, 0.5+shift, 0.0, 1.0);				//左下
-		   tessellator.addVertexWithUV(0, heightByBlock, 0.5+shift, 0.0, 0.0);	//左上
+		   tessellator.addVertexWithUV(0, 0, 0.5+shift, 0.0, 1.0);										//左下
+		   tessellator.addVertexWithUV(0, heightByBlock, 0.5+shift, 0.0, 0.0);							//左上
 		   tessellator.addVertexWithUV(0, heightByBlock, 0.5-widthByBlock+shift, 1.0, 0.0);				//右上
 		   tessellator.addVertexWithUV(0, 0, 0.5-widthByBlock+shift, 1.0, 1.0);							//右下
 
@@ -85,12 +89,12 @@ public class RenderSimpleFlag extends Render{
 		   //z+を向く面
 		   tessellator.addVertexWithUV(-0.5+widthByBlock-shift, 0, 0, 1.0, 1.0);					//右下
 		   tessellator.addVertexWithUV(-0.5+widthByBlock-shift, heightByBlock, 0, 1.0, 0.0);		//右上
-		   tessellator.addVertexWithUV(-0.5-shift, heightByBlock, 0, 0.0, 0.0);					//左上
-		   tessellator.addVertexWithUV(-0.5-shift, 0, 0, 0.0, 1.0);								//左下
+		   tessellator.addVertexWithUV(-0.5-shift, heightByBlock, 0, 0.0, 0.0);						//左上
+		   tessellator.addVertexWithUV(-0.5-shift, 0, 0, 0.0, 1.0);									//左下
 
 		   //z-を向く面
-		   tessellator.addVertexWithUV(-0.5-shift, 0, 0, 0.0, 1.0);								//左下
-		   tessellator.addVertexWithUV(-0.5-shift, heightByBlock, 0, 0.0, 0.0);					//左上
+		   tessellator.addVertexWithUV(-0.5-shift, 0, 0, 0.0, 1.0);									//左下
+		   tessellator.addVertexWithUV(-0.5-shift, heightByBlock, 0, 0.0, 0.0);						//左上
 		   tessellator.addVertexWithUV(-0.5+widthByBlock-shift, heightByBlock, 0, 1.0, 0.0);		//右上
 		   tessellator.addVertexWithUV(-0.5+widthByBlock-shift, 0, 0, 1.0, 1.0);					//右下
 		   break;
@@ -99,16 +103,16 @@ public class RenderSimpleFlag extends Render{
 		   //direction=2 z-軸方向に旗の軸
 
 		   //x+を向く面
-		   tessellator.addVertexWithUV(0, 0, -0.5+widthByBlock-shift, 1.0, 1.0);							//右下
-		   tessellator.addVertexWithUV(0, heightByBlock, -0.5+widthByBlock-shift, 1.0, 0.0);				//右上
-		   tessellator.addVertexWithUV(0, heightByBlock, -0.5-shift, 0.0, 0.0);	//左上
-		   tessellator.addVertexWithUV(0, 0, -0.5-shift, 0.0, 1.0);				//左下
+		   tessellator.addVertexWithUV(0, 0, -0.5+widthByBlock-shift, 1.0, 1.0);						//右下
+		   tessellator.addVertexWithUV(0, heightByBlock, -0.5+widthByBlock-shift, 1.0, 0.0);			//右上
+		   tessellator.addVertexWithUV(0, heightByBlock, -0.5-shift, 0.0, 0.0);							//左上
+		   tessellator.addVertexWithUV(0, 0, -0.5-shift, 0.0, 1.0);										//左下
 
 		   //x-を向く面
-		   tessellator.addVertexWithUV(0, 0, -0.5-shift, 0.0, 1.0);				//左下
-		   tessellator.addVertexWithUV(0, heightByBlock, -0.5-shift, 0.0, 0.0);	//左上
-		   tessellator.addVertexWithUV(0, heightByBlock, -0.5+widthByBlock-shift, 1.0, 0.0);				//右上
-		   tessellator.addVertexWithUV(0, 0, -0.5+widthByBlock-shift, 1.0, 1.0);							//右下
+		   tessellator.addVertexWithUV(0, 0, -0.5-shift, 0.0, 1.0);										//左下
+		   tessellator.addVertexWithUV(0, heightByBlock, -0.5-shift, 0.0, 0.0);							//左上
+		   tessellator.addVertexWithUV(0, heightByBlock, -0.5+widthByBlock-shift, 1.0, 0.0);			//右上
+		   tessellator.addVertexWithUV(0, 0, -0.5+widthByBlock-shift, 1.0, 1.0);						//右下
 
 		   break;
 	   case 3:
