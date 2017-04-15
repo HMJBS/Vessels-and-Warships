@@ -21,7 +21,7 @@ public class EntitySimpleFlag extends Entity {
 	private float width;
 	private float height;
 	private int health;
-	private static float SHIFT_FOR_FENCE = 0.37f;
+	public static final float SHIFT_FOR_FENCE = 0.37f;
 	private BufferedImage texture;
 	private float textureScale;		//テキスチャの拡大倍率　1.0なら360pixelを1ブロック分で描画
 	private int direction;			//旗の軸の方向　0 south z+, 1 west x- ,2 north z-, 3 east x+
@@ -32,10 +32,15 @@ public class EntitySimpleFlag extends Entity {
 	private ResourceLocation resourceLoc;
 
 
-	public EntitySimpleFlag(World world) {
+	public EntitySimpleFlag(World world,int direction,float shift) {
 
 		//スーパークラスのコンストラクタを忘れずに
 		super(world);
+
+		System.out.println("called EntitySimpleFlag(world,dir,shift)");
+		System.out.println("world.isRemote==" + world.isRemote);
+		Error err = new Error();
+		err.printStackTrace();
 
 		//テキスチャにしたいpngファイル名
 		this.textureName="uk_nav.png";
@@ -44,8 +49,15 @@ public class EntitySimpleFlag extends Entity {
 		this.textureScale=1.0f;
 		this.setSize(0.5f, 1.0f);
 		this.ignoreFrustumCheck=true;	//エンティティが画面内になくても描画する
-		this.direction=0;
-		this.shiftAmout=0.0f;
+		this.direction=direction;
+		this.shiftAmout=shift;
+		System.out.println("initializing : direction=" + this.direction + " shift=" + this.shiftAmout);
+	}
+
+	public EntitySimpleFlag(World world){
+
+		this(world,0,0.0f);
+		System.out.println("called default EntitySimpleFlag");
 	}
 
 	private void checkTextureSize(){
@@ -87,8 +99,6 @@ public class EntitySimpleFlag extends Entity {
 
 		this.width=texture.getWidth();
 		this.height=texture.getHeight();
-		System.out.println("checkTextureSize Fin");
-
 
 	}
 
