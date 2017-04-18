@@ -17,6 +17,7 @@ import net.minecraft.world.World;
 public class EntitySimpleFlag extends Entity {
 
 
+
 	//単位はブロック単位
 	private float width;
 	private float height;
@@ -179,18 +180,6 @@ public class EntitySimpleFlag extends Entity {
 
 	}
 
-	@Override
-	protected void readEntityFromNBT(NBTTagCompound p_70037_1_) {
-		// TODO 自動生成されたメソッド・スタブ
-
-	}
-
-	@Override
-	protected void writeEntityToNBT(NBTTagCompound p_70014_1_) {
-		// TODO 自動生成されたメソッド・スタブ
-
-	}
-
 	/* このエンティティのResourceLocationを返す　*/
 	public ResourceLocation getResourceLocation(){
 
@@ -220,5 +209,24 @@ public class EntitySimpleFlag extends Entity {
 	public float getShiftAmout(){
 
 		return this.shiftAmout;
+	}
+
+	//Entityを継承した場合、writeToNBT,readFromNBTをオーバーライドせず、専用のreadEntityFromNBT,writeEntityToNBTを使う方が良い？
+	@Override
+	protected void readEntityFromNBT(NBTTagCompound nbt) {
+
+		System.out.println("readEntityFromNBT()");
+		nbt.setInteger("direction", this.direction);
+		nbt.setFloat("shiftAmount", this.shiftAmout);
+
+	}
+
+	@Override
+	protected void writeEntityToNBT(NBTTagCompound nbt) {
+
+		System.out.println("writeEntityToNBT");
+		this.direction=nbt.getInteger("direction");
+		this.shiftAmout=nbt.getFloat("shiftAmount");
+
 	}
 }
