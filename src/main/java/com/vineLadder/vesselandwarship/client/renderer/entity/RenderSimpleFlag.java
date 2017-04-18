@@ -60,9 +60,6 @@ public class RenderSimpleFlag extends Render{
 	   int direction=entity.getDirection();
 
 	   //左3パラメータxyzはブロック単位で原点はブロックの真ん中、uvはテクセル(Texel)単位 テキスチャの辺の長さを1とした時の相対的な座標指定
-
-	   System.out.println("rendering : direction=" + direction + " shift=" + shift);
-
 	   switch(direction){
 	   case 0:
 	   default:
