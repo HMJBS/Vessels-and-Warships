@@ -32,6 +32,10 @@ public class EntitySimpleFlag extends Entity {
 	private String textureName;
 	private ResourceLocation resourceLoc;
 
+	//dataWatcher ID
+	private static final int ID_DIRECTION = 2;
+	private static final int ID_SHIFTAMOUT = 3;
+
 
 	public EntitySimpleFlag(World world,int direction,float shift) {
 
@@ -40,8 +44,33 @@ public class EntitySimpleFlag extends Entity {
 
 		System.out.println("called EntitySimpleFlag(world,dir,shift)");
 		System.out.println("world.isRemote==" + world.isRemote);
-		Error err = new Error();
-		err.printStackTrace();
+		this.direction=direction;
+		this.shiftAmout=shift;
+
+		this.init();
+		
+		//dataWatcherに実際のdirection,ShiftAmountの値を登録する
+		this.setDirection(this.direction);
+		this.setShiftAmount(this.shiftAmout);
+
+		System.out.println("initializing : direction=" + this.direction + " shift=" + this.shiftAmout);
+	}
+
+	public EntitySimpleFlag(World world){
+
+		super(world);
+		System.out.println("called EntitySimpleFlag(world)");
+		System.out.println("world.isRemote==" + world.isRemote);
+		this.direction=this.getDirectionFromWatcher();
+		this.shiftAmout=this.getShiftAmountFromWatcher();
+		System.out.println("datawatcher received");
+		System.out.println("direction=" + direction + ":shift=" + shiftAmout);
+
+		this.init();
+
+	}
+
+	private void init(){
 
 		//テキスチャにしたいpngファイル名
 		this.textureName="uk_nav.png";
@@ -50,16 +79,8 @@ public class EntitySimpleFlag extends Entity {
 		this.textureScale=1.0f;
 		this.setSize(0.5f, 1.0f);
 		this.ignoreFrustumCheck=true;	//エンティティが画面内になくても描画する
-		this.direction=direction;
-		this.shiftAmout=shift;
-		System.out.println("initializing : direction=" + this.direction + " shift=" + this.shiftAmout);
 	}
 
-	public EntitySimpleFlag(World world){
-
-		this(world,0,0.0f);
-		System.out.println("called default EntitySimpleFlag");
-	}
 
 	private void checkTextureSize(){
 
@@ -176,8 +197,33 @@ public class EntitySimpleFlag extends Entity {
 	@Override
 	protected void entityInit() {
 
-		//called in Entity();
+		//super.entityInit()がprotectedになっている
+		//ただし何もしていない
 
+		this.dataWatcher.addObject(this.ID_DIRECTION, Integer.valueOf(0));
+		this.dataWatcher.addObject(this.ID_SHIFTAMOUT, Float.valueOf(0.0f));
+		System.out.println("dataWatcher registered");
+
+	}
+	
+	private void setDirection(int direction){
+		
+		this.dataWatcher.updateObject(this.ID_DIRECTION, Integer.valueOf(direction));
+	}
+	
+	private void setShiftAmount(float shift){
+		
+		this.dataWatcher.updateObject(ID_SHIFTAMOUT, Float.valueOf(shift));
+	}
+	
+	private int getDirectionFromWatcher(){
+		
+		return this.dataWatcher.getWatchableObjectInt(this.ID_DIRECTION);
+	}
+	
+	private float getShiftAmountFromWatcher(){
+		
+		return this.dataWatcher.getWatchableObjectFloat(this.ID_SHIFTAMOUT);
 	}
 
 	/* このエンティティのResourceLocationを返す　*/
