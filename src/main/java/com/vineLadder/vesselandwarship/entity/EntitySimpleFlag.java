@@ -16,8 +16,6 @@ import net.minecraft.world.World;
 
 public class EntitySimpleFlag extends Entity {
 
-
-
 	//単位はブロック単位
 	private float width;
 	private float height;
@@ -36,29 +34,27 @@ public class EntitySimpleFlag extends Entity {
 	private static final int ID_DIRECTION = 2;
 	private static final int ID_SHIFTAMOUT = 3;
 
+ 	public EntitySimpleFlag(World world,int direction,float shift) {
 
-	public EntitySimpleFlag(World world,int direction,float shift) {
+ 		super(world);
 
-		//スーパークラスのコンストラクタを忘れずに
-		super(world);
-
-		System.out.println("called EntitySimpleFlag(world,dir,shift)");
-		System.out.println("world.isRemote==" + world.isRemote);
-		this.direction=direction;
-		this.shiftAmout=shift;
+ 		System.out.println("called EntitySimpleFlag(world,dir,shift)");
+ 		System.out.println("world.isRemote==" + world.isRemote);
 
 		this.init();
-		
-		//dataWatcherに実際のdirection,ShiftAmountの値を登録する
-		this.setDirection(this.direction);
-		this.setShiftAmount(this.shiftAmout);
 
-		System.out.println("initializing : direction=" + this.direction + " shift=" + this.shiftAmout);
+	//dataWatcherに実際のdirection,ShiftAmountの値を登録する
+
+		this.setDirection(direction);
+		this.setShiftAmount(shift);
+
+	System.out.println("initializing : direction=" + this.direction + " shift=" + this.shiftAmout);
+
 	}
-
-	public EntitySimpleFlag(World world){
+ 	public EntitySimpleFlag(World world){
 
 		super(world);
+
 		System.out.println("called EntitySimpleFlag(world)");
 		System.out.println("world.isRemote==" + world.isRemote);
 		this.direction=this.getDirectionFromWatcher();
@@ -200,29 +196,31 @@ public class EntitySimpleFlag extends Entity {
 		//super.entityInit()がprotectedになっている
 		//ただし何もしていない
 
-		this.dataWatcher.addObject(this.ID_DIRECTION, Integer.valueOf(0));
-		this.dataWatcher.addObject(this.ID_SHIFTAMOUT, Float.valueOf(0.0f));
-		System.out.println("dataWatcher registered");
+		this.dataWatcher.addObject(this.ID_DIRECTION, Integer.valueOf(-1));
+		this.dataWatcher.addObject(this.ID_SHIFTAMOUT, Float.valueOf(-1.0f));
+		System.out.println("dataWatcher initialized");
 
 	}
-	
-	private void setDirection(int direction){
-		
+
+	public void setDirection(int direction){
+
+		System.out.println("direction=" + direction + " set in watcher");
 		this.dataWatcher.updateObject(this.ID_DIRECTION, Integer.valueOf(direction));
 	}
-	
-	private void setShiftAmount(float shift){
-		
+
+	public void setShiftAmount(float shift){
+
+		System.out.println("shift=" + shift + " set in watcher");
 		this.dataWatcher.updateObject(ID_SHIFTAMOUT, Float.valueOf(shift));
 	}
-	
+
 	private int getDirectionFromWatcher(){
-		
+
 		return this.dataWatcher.getWatchableObjectInt(this.ID_DIRECTION);
 	}
-	
+
 	private float getShiftAmountFromWatcher(){
-		
+
 		return this.dataWatcher.getWatchableObjectFloat(this.ID_SHIFTAMOUT);
 	}
 

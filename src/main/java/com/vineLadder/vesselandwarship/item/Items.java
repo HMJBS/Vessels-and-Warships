@@ -5,11 +5,11 @@ import net.minecraft.item.Item;
 
 public final class Items {
 
-	public static Item itemSimpleFlag;
+	public static Item itemSimpleFlagPlacer;
 
 	public  final static void preInit(){
 
-		GameRegistry.registerItem(itemSimpleFlag = new ItemSimpleFlag(), "imtesimpleflag");
+		GameRegistry.registerItem(itemSimpleFlagPlacer = new ItemSimpleFlagPlacer(), "imtesimpleflagplacer");
 
 	}
 

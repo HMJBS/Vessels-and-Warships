@@ -79,7 +79,7 @@ public class ItemSimpleFlag extends Item {
     				shift=0.0f;
     			}
 
-    			EntitySimpleFlag entity = new EntitySimpleFlag(world, direction, shift);
+    			EntitySimpleFlag entity = new EntitySimpleFlag(world);
     			entity.setLocationAndAngles((double)x+0.5d,(double)y,(double)z+0.5d, 0.0f, 0.0f);
     			world.spawnEntityInWorld(entity);
 

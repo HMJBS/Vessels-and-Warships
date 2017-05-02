@@ -61,8 +61,10 @@ public class RenderSimpleFlag extends Render{
 
 	   //左3パラメータxyzはブロック単位で原点はブロックの真ん中、uvはテクセル(Texel)単位 テキスチャの辺の長さを1とした時の相対的な座標指定
 	   switch(direction){
-	   case 0:
+
 	   default:
+		   break;
+	   case 0:
 		   //direction=0 z+軸方向に旗の軸
 
 		   //x+を向く面
