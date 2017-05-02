@@ -106,7 +106,10 @@ public class ItemSimpleFlagPlacer extends Item {
 		EntitySimpleFlag simpleFlag = new EntitySimpleFlag(world,direction,shift);
 		System.out.println("fin declaration of simpleflag");
 		simpleFlag.setLocationAndAngles(x, y, z, MathHelper.wrapAngleTo180_float(world.rand.nextFloat()*360.0f), 0.0f);
-		world.spawnEntityInWorld(simpleFlag);
+		
+		if(!world.isRemote){
+			world.spawnEntityInWorld(simpleFlag);
+		}
 		return simpleFlag;
 	}
 
